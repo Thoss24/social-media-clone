@@ -1,16 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "./views/Login";
+import LoginRegistrationLayout from "./components/layouts/LoginRegistrationLayout";
+import CreateAccount from "./views/login-registration/CreateAccount";
+import Login from "./views/login-registration/Login";
 import NotFound from "./views/NotFound";
 
-    const router = createBrowserRouter([
-        {
-            path: '/login',
-            element: <Login />
-        },
-        {
-            path: '*',
-            element: <NotFound />
-        }
-    ]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginRegistrationLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "/create-account",
+        element: <CreateAccount />
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 export default router;
