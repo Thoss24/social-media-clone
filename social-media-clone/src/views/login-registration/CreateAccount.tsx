@@ -3,7 +3,7 @@ const CreateAccount = () => {
     return (
         <div className="flex w-full justify-center items-center">
         <section className="flex flex-col justify-center items-center bg-white rounded-lg p-3">
-            <h1 className="text-2xl font-semibold m-3">Login to Your Account</h1>
+            <h1 className="text-2xl font-semibold m-3">Create Account</h1>
             <form action="" className="flex flex-col justify-center items-start">
                 <fieldset className="flex flex-col justify-center items-start m-1">
                     <label htmlFor="email">Email</label>
