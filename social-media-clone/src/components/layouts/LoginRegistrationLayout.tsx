@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useOutletContext } from "react-router-dom";
 import { motion, useAnimationControls } from "framer-motion";
 import LoginSignUpAside from "../login-sign-up-pages/LoginSignUpAside";
 
@@ -77,10 +77,14 @@ const LoginRegistrationLayout = () => {
       </motion.div>
 
       <motion.div className="w-full sm:w-3/5 sm:hidden flex">
-        <Outlet />
+        <Outlet context={createAccountDisplayHandler}/>
       </motion.div>
     </div>
   );
 };
 
 export default LoginRegistrationLayout;
+
+export const setLoginSignUpDisplay = () => {
+  return useOutletContext<() => void>();
+};
