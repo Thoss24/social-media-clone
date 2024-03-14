@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const useFormValidate = (validate: (str: string) => boolean) => {
     
-    const [isTouched, setIsTouched] = useState<boolean>(true);
+    const [isTouched, setIsTouched] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
 
     const inputIsValid: boolean = validate(inputValue);
@@ -10,12 +10,10 @@ const useFormValidate = (validate: (str: string) => boolean) => {
 
     const updateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value)
-        console.log(inputIsInvalid)
     };
 
     const updateInputTouched = () => {
         setIsTouched(true)
-        console.log(isTouched)
     };
 
     const resetInput = () => {

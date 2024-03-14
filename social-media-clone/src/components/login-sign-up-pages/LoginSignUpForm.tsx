@@ -7,6 +7,7 @@ const LoginSignUpForm: React.FC<{
   title: string;
   pageLocation: string;
   btnText: string;
+  authErrMsg: string;
 }> = (props) => {
 
   const toggleSignUp = setLoginSignUpDisplay();
@@ -32,41 +33,39 @@ const LoginSignUpForm: React.FC<{
     resetInput: resetPassword
   } = useFormValidate(validatePassword)
 
-  let formIsValid = false
+  let formIsValid = false;
 
-  if (!passwordInputIsInvalid && !emailInputIsInvalid) {
-    formIsValid = true
-  }
+  passwordInputIsValid && emailInputIsValid ? formIsValid = true : formIsValid = false;
 
   return (
     <div className="flex w-full justify-center items-center">
-      <section className="flex flex-col justify-center items-center bg-white rounded-lg p-3">
+      <section className="flex flex-col justify-center items-center bg-white rounded-lg p-3 m-0.5">
         <h1 className="text-2xl font-semibold m-3">{props.title}</h1>
         <form action="" className="flex flex-col justify-center items-start">
-          <fieldset className="flex flex-col justify-center items-start">
+          <fieldset className="flex flex-col justify-center items-start w-full">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" className="font-normal focus:outline-none focus:ring focus:ring-emerald-100" onBlur={updateEmailIsTouched} onChange={updateEmail}/>
-            <p className={`${emailInputIsInvalid ? "text-red-500" : "invisible"}`}>Error</p>
+            <input type="email" id="email" className={`font-normal pl-1 focus:outline-none ring-1 focus:ring-2 w-full ${emailInputIsInvalid ? 'ring-red-400' : 'ring-black' }`} onBlur={updateEmailIsTouched} onChange={updateEmail}/>
+            <p className={`text-xs flex flex-wrap ${emailInputIsInvalid ? "text-red-500" : "invisible"}`}>Email must include '@'</p>
           </fieldset>
-          <fieldset className="flex flex-col justify-center items-start">
+          <fieldset className="flex flex-col justify-center items-start w-full">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" className="font-normal focus:outline-none focus:ring focus:ring-emerald-100" onBlur={updatePasswordIsTouched} onChange={updatePassword}/>
-            <p className={`${passwordInputIsInvalid ? "text-red-500" : "invisible"}`}>Error</p>
+            <input type="password" id="password" className={`font-normal pl-1 focus:outline-none ring-1 focus:ring-2 w-full ${passwordInputIsInvalid ? 'ring-red-400' : 'ring-black' }`} onBlur={updatePasswordIsTouched} onChange={updatePassword}/>
+            <p className={`text-xs flex flex-wrap ${passwordInputIsInvalid ? "text-red-500" : "invisible"}`}></p>
           </fieldset>
           <div className="flex flex-row justify-between w-full">
             <button
-              className="mt-3 rounded-lg bg-emerald-400 text-white p-1 hover:cursor-pointer hover:scale-105"
+              className={`mt-3 rounded-lg bg-emerald-400 text-white p-1 ${emailInputIsInvalid || passwordInputIsInvalid ? 'opacity-50' : 'bg-emerald-400 hover:cursor-pointer hover:scale-105'}`}
               type="submit"
+              disabled={formIsValid ? false : true}
             >
               {props.btnText}
             </button>
             {props.pageLocation === "/create-account" && (
               <NavLink to={props.pageLocation}>
                 <button
-                  className="mt-3 rounded-lg bg-emerald-400 text-white p-1 flex sm:hidden hover:cursor-pointer hover:scale-105"
+                  className={`mt-3 rounded-lg bg-emerald-400 text-white p-1 flex sm:hidden hover:cursor-pointer hover:scale-105`}
                   type="submit"
                   onClick={toggleSignUp}
-                  disabled={formIsValid ? true : false}
                 >
                   Sign up
                 </button>
