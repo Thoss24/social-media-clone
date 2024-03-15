@@ -85,6 +85,3 @@ const LoginRegistrationLayout = () => {
 
 export default LoginRegistrationLayout;
 
-export const setLoginSignUpDisplay = () => {
-  return useOutletContext<() => void>();
-};

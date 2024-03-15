@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { setLoginSignUpDisplay } from "../layouts/LoginRegistrationLayout";
+import { setLoginSignUpDisplay } from "../../context/loginSignUpDisplayCtx";
 import useValidateInput from "../../hooks/useValidateInput";
 import useFormValidate from "../../hooks/useFormValidate";
 
@@ -14,7 +14,8 @@ const LoginSignUpForm: React.FC<{
 
   const {
     validateEmail,
-    validatePassword
+    validatePassword,
+    passwordErr
   } = useValidateInput()
 
   const {
@@ -50,7 +51,7 @@ const LoginSignUpForm: React.FC<{
           <fieldset className="flex flex-col justify-center items-start w-full">
             <label htmlFor="password">Password</label>
             <input type="password" id="password" className={`font-normal pl-1 focus:outline-none ring-1 focus:ring-2 w-full ${passwordInputIsInvalid ? 'ring-red-400' : 'ring-black' }`} onBlur={updatePasswordIsTouched} onChange={updatePassword}/>
-            <p className={`text-xs flex flex-wrap ${passwordInputIsInvalid ? "text-red-500" : "invisible"}`}></p>
+            <p className={`text-xs flex flex-wrap ${passwordInputIsInvalid ? "text-red-500" : "invisible"}`}>Error: {passwordErr.err}</p>
           </fieldset>
           <div className="flex flex-row justify-between w-full">
             <button
