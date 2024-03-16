@@ -11,7 +11,7 @@ const useValidateInput = () => {
     const hasNumber = /[0-9]/.test(password);
     const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?/]/.test(
       password
-    );
+  );
 
     if (password.length < 6) {
       passwordErr.err = "Min length is 6 characters";
