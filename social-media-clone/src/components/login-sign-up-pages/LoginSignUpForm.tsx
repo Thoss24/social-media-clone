@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { setLoginSignUpDisplay } from "../../context/loginSignUpDisplayCtx";
 import { FormEvent, useRef } from "react";
-import axios from "axios";
+// import axios from "axios";
+import axiosClient from "../../views/axios_client";
 import useValidateInput from "../../hooks/useValidateInput";
 import useFormValidate from "../../hooks/useFormValidate"
 
@@ -43,7 +44,12 @@ const LoginSignUpForm: React.FC<{
   const loginSignUpHandler = (e: FormEvent) => {
     e.preventDefault();
 
-    axios.get('http://127.0.0.1:8000/api/login_test')
+    const userInfo = {
+      password: passwordRef.current!.value,
+      email: emailRef.current!.value
+    }
+
+    axiosClient.post('/login_test', userInfo)
       .then((response) => {
         console.log(response.data);
       })
