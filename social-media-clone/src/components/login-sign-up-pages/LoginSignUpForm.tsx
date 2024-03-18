@@ -49,7 +49,7 @@ const LoginSignUpForm: React.FC<{
       email: emailRef.current!.value
     }
 
-    axiosClient.post('/login_test', userInfo)
+    axiosClient.post('/login', userInfo)
       .then((response) => {
         console.log(response.data);
       })
