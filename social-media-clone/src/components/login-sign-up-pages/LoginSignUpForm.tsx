@@ -16,6 +16,7 @@ const LoginSignUpForm: React.FC<{
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   const { validateEmail, validatePassword, passwordErr } = useValidateInput();
 
@@ -42,6 +43,7 @@ const LoginSignUpForm: React.FC<{
     : (formIsValid = false);
 
   const loginSignUpHandler = (e: FormEvent) => {
+    console.log(props.pageLocation)
     e.preventDefault();
 
     const userInfo = {
@@ -49,13 +51,23 @@ const LoginSignUpForm: React.FC<{
       email: emailRef.current!.value
     }
 
-    axiosClient.post('/login', userInfo)
+    if (props.pageLocation === '/') {
+      axiosClient.post('/login', userInfo)
       .then((response) => {
         console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
+    } else {
+      axiosClient.post('/register', userInfo)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   };
 
   return (
@@ -63,6 +75,15 @@ const LoginSignUpForm: React.FC<{
       <section className="flex flex-col justify-center items-center bg-white rounded-lg p-3 m-0.5">
         <h1 className="text-2xl font-semibold m-3">{props.title}</h1>
         <form action="" className="flex flex-col justify-center items-start" onSubmit={loginSignUpHandler}>
+          {props.pageLocation === '/create-account' &&
+          <fieldset className="flex flex-col justify-center items-start w-full">
+            <label htmlFor="name">Name</label>
+            <input
+              ref={nameRef}
+              type="text"
+              id="name"
+            />
+          </fieldset> }
           <fieldset className="flex flex-col justify-center items-start w-full">
             <label htmlFor="email">Email</label>
             <input
