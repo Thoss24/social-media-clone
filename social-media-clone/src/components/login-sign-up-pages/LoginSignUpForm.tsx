@@ -47,6 +47,7 @@ const LoginSignUpForm: React.FC<{
     e.preventDefault();
 
     const userInfo = {
+      name: nameRef.current!.value,
       password: passwordRef.current!.value,
       email: emailRef.current!.value
     }

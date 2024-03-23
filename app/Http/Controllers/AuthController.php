@@ -42,6 +42,8 @@ class AuthController extends Controller
 
         $token = auth()->login($user);
 
+        $user->sendEmailVerificationNotification();
+
         return response()->json([
             'status' => 'success',
             'token' => $token,
