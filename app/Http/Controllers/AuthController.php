@@ -3,25 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\SignupRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use \App\Models\Person;
 use \App\Models\User;
 use App\Http\Controllers\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function login(LoginRequest $request) 
     {
         $credentials = request(['email', 'password']);
+        $remember = request(['remember'])['remember'];
 
-        if (! $token = auth()->attempt($credentials)) {
+        if ($token = auth()->attempt($credentials)) {
+            $user = Auth::user();
+        
+            if ($remember) {
+                $token = JWTAuth::fromUser($user, ['remember' => true]);
+
+                $user->remember_token = $token;
+            }
+        } else {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        } 
 
         return $this->respondWithToken($token);
     }
@@ -42,7 +48,7 @@ class AuthController extends Controller
 
         $token = auth()->login($user);
 
-        $user->sendEmailVerificationNotification();
+        //$user->sendEmailVerificationNotification();
 
         return response()->json([
             'status' => 'success',
@@ -54,4 +60,14 @@ class AuthController extends Controller
     public function logout(Request $request) {
 
     }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => Auth::factory()->getTTL() * 60
+        ]);
+    }
+
 }

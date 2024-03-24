@@ -17,6 +17,7 @@ const LoginSignUpForm: React.FC<{
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const rememberInputRef = useRef<HTMLInputElement>(null);
 
   const { validateEmail, validatePassword, passwordErr } = useValidateInput();
 
@@ -46,14 +47,20 @@ const LoginSignUpForm: React.FC<{
     console.log(props.pageLocation)
     e.preventDefault();
 
-    const userInfo = {
-      name: nameRef.current!.value,
+    const loginUserInfo: {remember: boolean, password: string, email: string} = {
+      remember: props.pageLocation === '/' ? rememberInputRef.current!.checked : false,
+      password: passwordRef.current!.value,
+      email: emailRef.current!.value
+    }
+
+    const signUpUserInfo: {name: string, password: string, email: string} = {
+      name: props.pageLocation === '/create-account' ? nameRef.current!.value : '',
       password: passwordRef.current!.value,
       email: emailRef.current!.value
     }
 
     if (props.pageLocation === '/') {
-      axiosClient.post('/login', userInfo)
+      axiosClient.post('/login', loginUserInfo)
       .then((response) => {
         console.log(response.data);
       })
@@ -61,7 +68,7 @@ const LoginSignUpForm: React.FC<{
         console.log(error);
       });
     } else {
-      axiosClient.post('/register', userInfo)
+      axiosClient.post('/register', signUpUserInfo)
       .then((response) => {
         console.log(response.data);
       })
@@ -81,6 +88,7 @@ const LoginSignUpForm: React.FC<{
             <label htmlFor="name">Name</label>
             <input
               ref={nameRef}
+              className={`font-normal pl-1 focus:outline-none ring-1 focus:ring-2 w-full ring-black`}
               type="text"
               id="name"
             />
@@ -137,6 +145,11 @@ const LoginSignUpForm: React.FC<{
             >
               {props.btnText}
             </button>
+            {props.pageLocation ===  '/' && 
+            <div className="flex justify-center items-center">
+              <label className="mr-2" htmlFor="remember">Remember me</label>
+              <input type="checkbox" id="remember" ref={rememberInputRef}/>
+            </div>}
             {props.pageLocation === "/create-account" && (
               <NavLink to={props.pageLocation}>
                 <button
