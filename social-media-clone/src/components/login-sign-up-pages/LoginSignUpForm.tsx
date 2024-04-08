@@ -3,6 +3,7 @@ import { setLoginSignUpDisplay } from "../../context/loginSignUpDisplayCtx";
 import { FormEvent, useRef } from "react";
 // import axios from "axios";
 import axiosClient from "../../views/axios_client";
+import axios from "axios";
 import useValidateInput from "../../hooks/useValidateInput";
 import useFormValidate from "../../hooks/useFormValidate"
 
@@ -14,10 +15,11 @@ const LoginSignUpForm: React.FC<{
 }> = (props) => {
   const toggleSignUp = setLoginSignUpDisplay();
 
+  axiosClient.defaults.withCredentials = true
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
-  const rememberInputRef = useRef<HTMLInputElement>(null);
 
   const { validateEmail, validatePassword, passwordErr } = useValidateInput();
 
@@ -47,8 +49,7 @@ const LoginSignUpForm: React.FC<{
     console.log(props.pageLocation)
     e.preventDefault();
 
-    const loginUserInfo: {remember: boolean, password: string, email: string} = {
-      remember: props.pageLocation === '/' ? rememberInputRef.current!.checked : false,
+    const loginUserInfo: {password: string, email: string} = {
       password: passwordRef.current!.value,
       email: emailRef.current!.value
     }
@@ -59,23 +60,27 @@ const LoginSignUpForm: React.FC<{
       email: emailRef.current!.value
     }
 
-    if (props.pageLocation === '/') {
-      axiosClient.post('/login', loginUserInfo)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    } else {
-      axiosClient.post('/register', signUpUserInfo)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+    axios.get('/sanctum/csrf-cookie').then(response => {
+      if (props.pageLocation === '/') {
+        axiosClient.post('/login', loginUserInfo)
+        .then((response) => {
+          console.log(response)
+          //window.location.href = '/home'
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      } else {
+        axiosClient.post('/register', signUpUserInfo)
+        .then((response) => {
+          console.log(response)
+          //window.location.href = '/home'
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    });
   };
 
   return (
@@ -145,11 +150,6 @@ const LoginSignUpForm: React.FC<{
             >
               {props.btnText}
             </button>
-            {props.pageLocation ===  '/' && 
-            <div className="flex justify-center items-center">
-              <label className="mr-2" htmlFor="remember">Remember me</label>
-              <input type="checkbox" id="remember" ref={rememberInputRef}/>
-            </div>}
             {props.pageLocation === "/create-account" && (
               <NavLink to={props.pageLocation}>
                 <button

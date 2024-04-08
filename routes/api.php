@@ -20,9 +20,26 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
 });
+
+// Route::middleware('auth:sanctum')->get('/user', function () {
+//     return view('user');
+// });
+
+// Route::get('/user', function () {
+//     //
+// })->middleware('auth:api');
+
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
+
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('/logout', [AuthController::class, 'logout']);
+// });
